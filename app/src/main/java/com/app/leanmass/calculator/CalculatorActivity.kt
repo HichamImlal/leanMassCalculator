@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
-import com.app.leanmass.R
 import com.app.leanmass.auth.LoginActivity
 import com.app.leanmass.config.LBMConfig
 import com.app.leanmass.db.DatabaseHelper
 import com.app.leanmass.history.HistoryActivity
 import com.app.leanmass.model.LBMResult
-import com.app.leanmass.databinding.ActivityCalculatorBinding
+import com.leanmass.calculator.R
+import com.leanmass.calculator.databinding.ActivityCalculatorBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -25,6 +25,7 @@ class CalculatorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityCalculatorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -34,6 +35,7 @@ class CalculatorActivity : AppCompatActivity() {
 
         if (auth.currentUser == null) {
             goToLogin()
+            return
         }
 
         binding.btnCalculer.setOnClickListener {
@@ -41,8 +43,7 @@ class CalculatorActivity : AppCompatActivity() {
         }
 
         binding.btnHistorique.setOnClickListener {
-            val intent = Intent(this, HistoryActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
 
         binding.btnLogout.setOnClickListener {
@@ -57,8 +58,9 @@ class CalculatorActivity : AppCompatActivity() {
     }
 
     private fun effectuerLeCalcul() {
-        val poidsStr = binding.etPoids.text.toString()
-        val tailleStr = binding.etTaille.text.toString()
+
+        val poidsStr = binding.etPoids.text.toString().trim()
+        val tailleStr = binding.etTaille.text.toString().trim()
 
         if (poidsStr.isEmpty() || tailleStr.isEmpty()) {
             binding.tvResultat.text = "---"
@@ -67,27 +69,62 @@ class CalculatorActivity : AppCompatActivity() {
             return
         }
 
-        val poids = poidsStr.toDouble()
-        val taille = tailleStr.toDouble()
+        val poids = poidsStr.toDoubleOrNull()
+        val taille = tailleStr.toDoubleOrNull()
+
+        if (poids == null || taille == null) {
+            binding.tvStatusMessage.text = "Valeurs invalides"
+            return
+        }
+
         val isHomme = binding.rbHomme.isChecked
         val sexeText = if (isHomme) "Homme" else "Femme"
 
-        val lbm = LBMCalculator.calculateLBM(poids, taille, isHomme)
+        val lbm = LBMCalculator.calculateLBM(
+            poids,
+            taille,
+            isHomme
+        )
 
-        binding.tvResultat.text = String.format(Locale.getDefault(), "%.2f kg", lbm)
+        binding.tvResultat.text =
+            String.format(Locale.getDefault(), "%.2f kg", lbm)
+
         binding.cardResultat.visibility = View.VISIBLE
 
-        val estSatisfaisant = if (isHomme) lbm >= LBMConfig.NORME_HOMME else lbm >= LBMConfig.NORME_FEMME
+        val estSatisfaisant =
+            if (isHomme) {
+                lbm >= LBMConfig.NORME_HOMME
+            } else {
+                lbm >= LBMConfig.NORME_FEMME
+            }
+
         binding.imgStatus.visibility = View.VISIBLE
 
         if (estSatisfaisant) {
-            binding.tvStatusMessage.text = getString(R.string.satisfaisant)
-            binding.tvStatusMessage.setTextColor(ContextCompat.getColor(this, R.color.white))
-            binding.imgStatus.setImageResource(android.R.drawable.ic_dialog_info)
+
+            binding.tvStatusMessage.text =
+                getString(R.string.satisfaisant)
+
+            binding.tvStatusMessage.setTextColor(
+                ContextCompat.getColor(this, R.color.white)
+            )
+
+            binding.imgStatus.setImageResource(
+                android.R.drawable.ic_dialog_info
+            )
+
         } else {
-            binding.tvStatusMessage.text = getString(R.string.surveiller)
-            binding.tvStatusMessage.setTextColor(ContextCompat.getColor(this, R.color.white))
-            binding.imgStatus.setImageResource(android.R.drawable.stat_sys_warning)
+
+            binding.tvStatusMessage.text =
+                getString(R.string.surveiller)
+
+            binding.tvStatusMessage.setTextColor(
+                ContextCompat.getColor(this, R.color.white)
+            )
+
+            binding.imgStatus.setImageResource(
+                android.R.drawable.stat_sys_warning
+            )
         }
 
         val nouvelEnregistrement = LBMResult(
@@ -98,8 +135,12 @@ class CalculatorActivity : AppCompatActivity() {
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val db = DatabaseHelper.getDatabase(this@CalculatorActivity)
-            db.leanMassDao().insertRecord(nouvelEnregistrement)
+
+            val db =
+                DatabaseHelper.getDatabase(this@CalculatorActivity)
+
+            db.leanMassDao()
+                .insertRecord(nouvelEnregistrement)
         }
     }
 }
