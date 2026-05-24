@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1071645650806",
+    "project_id": "lean-mass-app",
+    "storage_bucket": "lean-mass-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071645650806:android:7ebab02d263814c0d49457",
+        "android_client_info": {
+          "package_name": "com.hicham.leanmassapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa1tUoNxy7WrWAxyvuNAR9_gE8EaxlJaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

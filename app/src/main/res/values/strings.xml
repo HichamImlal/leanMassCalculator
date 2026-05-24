@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">LeanMassCalculator</string>
+    <string name="bienvenue">Bienvenue</string>
+    <string name="app_description">Calculateur de Masse Maigre</string>
+    <string name="email">Email</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Se connecter</string>
+    <string name="register_hint">Pas encore de compte ? S\'inscrire</string>
+    <string name="confirm_password">Confirmer le mot de passe</string>
+    <string name="register_action">S\'inscrire</string>
+    <string name="already_have_account">Déjà un compte ? Se connecter</string>
+    <string name="poids_hint">Poids (kg)</string>
+    <string name="taille_hint">Taille (cm)</string>
+    <string name="calculer">Calculer l\'indice LBM</string>
+    <string name="voir_historique">Voir l\'historique complet</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="infos_titre">Vos Informations</string>
+    <string name="resultat_titre">Résultat</string>
+    <string name="satisfaisant">Satisfaisant</string>
+    <string name="surveiller">À surveiller</string>
+</resources>
