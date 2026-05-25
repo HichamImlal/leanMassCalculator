@@ -12,8 +12,8 @@ import com.app.leanmass.config.LBMConfig
 import com.app.leanmass.db.DatabaseHelper
 import com.app.leanmass.history.HistoryActivity
 import com.app.leanmass.model.LBMResult
-import com.leanmass.calculator.R
-import com.leanmass.calculator.databinding.ActivityCalculatorBinding
+import com.app.leanmass.R
+import com.app.leanmass.databinding.ActivityCalculatorBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale

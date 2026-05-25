@@ -1,4 +1,4 @@
-package com.leanmass.calculator
+package com.app.leanmass
 
 import org.junit.Test
 
