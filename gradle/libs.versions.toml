@@ -14,6 +14,11 @@ constraintlayout = "2.1.4"
 room = "2.6.1"
 firebaseBom = "33.1.0"
 
+# Sécurité
+sqlcipher = "4.5.4"
+biometric = "1.1.0"
+sqlite = "2.4.0"
+
 # Tests
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -35,6 +40,11 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+
+# Sécurité et Authentification Biométrique
+sqlcipher-android = { group = "net.zetetic", name = "android-database-sqlcipher", version = "4.5.4" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version = "1.1.0" }
+androidx-sqlite-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version = "2.4.0" }
 
 # Tests
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -1,7 +1,10 @@
 package com.app.leanmass.history
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.leanmass.db.DatabaseHelper
@@ -30,11 +33,41 @@ class HistoryActivity : AppCompatActivity() {
         binding.rvHistory.layoutManager = LinearLayoutManager(this)
         binding.rvHistory.adapter = adapter
 
-        chargerHistorique()
+        // MASVS-AUTH-1: Protect History screen with Biometric Authentication
+        checkBiometrics()
 
         binding.btnViderHistorique.setOnClickListener {
             viderHistorique()
         }
+    }
+
+    private fun checkBiometrics() {
+        val executor = ContextCompat.getMainExecutor(this)
+        val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                chargerHistorique()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                Toast.makeText(this@HistoryActivity, "Authentification requise : $errString", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                // Just a hint, don't finish yet
+            }
+        })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Vérification d'identité")
+            .setSubtitle("Confirmez votre identité pour accéder à l'historique")
+            .setNegativeButtonText("Annuler")
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
     }
 
     private fun chargerHistorique() {

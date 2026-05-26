@@ -12,6 +12,8 @@ import com.app.leanmass.calculator.CalculatorActivity
 import com.app.leanmass.databinding.ActivityLoginBinding
 import com.app.leanmass.R
 
+import com.app.leanmass.util.SecureLog
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -30,12 +32,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            android.util.Log.d("LoginActivity", "Login button clicked")
+            SecureLog.d("LoginActivity", "Login button clicked")
             login()
         }
 
         binding.btnRegister.setOnClickListener {
-            android.util.Log.d("LoginActivity", "Register button clicked")
+            SecureLog.d("LoginActivity", "Register button clicked")
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
@@ -54,6 +56,11 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 binding.progressBar.visibility = View.GONE
                 if (task.isSuccessful) {
+                    // MASVS-SESSION-1: Reset session timestamp on successful login
+                    getSharedPreferences("session_prefs", MODE_PRIVATE).edit()
+                        .putLong("last_timestamp", System.currentTimeMillis())
+                        .apply()
+
                     startActivity(Intent(this, CalculatorActivity::class.java))
                     finish()
                 } else {
